@@ -1,0 +1,14 @@
+{
+  "classes": {
+    "default:mpf_control_agent_default_repository": {
+      "regular_expressions": [
+        "any"
+      ]
+    }
+  },
+  "variables": {
+    "default:def.control_agent_default_repository": {
+      "value": "/var/cfengine/edit_backups"
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "name": "Jenkins VM",
+  "description": "A Jenkins instance for running CI/CD",
+  "type": "policy-set",
+  "git": false,
+  "build": [
+    {
+      "name": "masterfiles",
+      "description": "Official CFEngine Masterfiles Policy Framework (MPF).",
+      "tags": ["supported", "base"],
+      "repo": "https://github.com/cfengine/masterfiles",
+      "by": "https://github.com/cfengine",
+      "version": "3.24.1",
+      "commit": "1171e2e50a229d78e2fdd4357a5d07ecc19bdbf4",
+      "added_by": "cfbs init",
+      "steps": [
+        "run EXPLICIT_VERSION=3.24.1 EXPLICIT_RELEASE=1 ./prepare.sh -y",
+        "copy ./ ./"
+      ]
+    },
+    {
+      "name": "./jenkins.cf",
+      "description": "Local policy file added using cfbs command line",
+      "tags": ["local"],
+      "added_by": "cfbs add",
+      "steps": [
+        "copy ./jenkins.cf services/cfbs/jenkins.cf",
+        "policy_files services/cfbs/jenkins.cf",
+        "bundles jenkins"
+      ]
+    },
+    {
+      "name": "./def.json",
+      "description": "Local augments file added using cfbs command line",
+      "tags": ["local"],
+      "added_by": "cfbs add",
+      "steps": ["json ./def.json def.json"]
+    },
+    {
+      "name": "library-for-promise-types-in-python",
+      "description": "Library enabling promise types implemented in python.",
+      "tags": ["supported", "library"],
+      "repo": "https://github.com/cfengine/modules",
+      "by": "https://github.com/cfengine",
+      "version": "0.2.3",
+      "commit": "2be0eee0788e2e562e43f0254c702f85b368c051",
+      "subdirectory": "libraries/python",
+      "added_by": "promise-type-groups",
+      "steps": ["copy cfengine.py modules/promises/"]
+    },
+    {
+      "name": "promise-type-groups",
+      "description": "Experimental promise type to manage local user groups.",
+      "tags": ["supported", "promise-type", "experimental"],
+      "repo": "https://github.com/cfengine/modules",
+      "by": "https://github.com/larsewi",
+      "version": "0.2.4",
+      "commit": "813fb3d172c8db5642ef69cd5e8ef32b264ef275",
+      "subdirectory": "promise-types/groups",
+      "dependencies": ["library-for-promise-types-in-python"],
+      "added_by": "cfbs add",
+      "steps": [
+        "copy groups.py modules/promises/",
+        "append enable.cf services/init.cf"
+      ]
+    },
+    {
+      "name": "./templates/",
+      "description": "Local subdirectory added using cfbs command line",
+      "tags": ["local"],
+      "added_by": "cfbs add",
+      "steps": ["copy ./motd.mustache templates/"]
+    },
+    {
+      "name": "./motd.cf",
+      "description": "Local policy file added using cfbs command line",
+      "tags": ["local"],
+      "added_by": "cfbs add",
+      "steps": [
+        "copy ./motd.cf services/cfbs/motd.cf",
+        "policy_files services/cfbs/motd.cf",
+        "bundles render_motd"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+bundle agent render_motd
+{
+  files:
+    "/etc/motd"
+      create => "true",
+      perms => m("444"),
+      template_method => "mustache",
+      edit_template => "$(sys.inputdir)/templates/motd.mustache";
+}
